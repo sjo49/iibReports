@@ -1,0 +1,18 @@
+{
+  "files.exclude": {
+    "**/*.toc": true,
+    "**/*.gz": true,
+    "**/*.aux": true,
+    "**/*.fls": true,
+    "**/*.fdb_latexmk": true,
+    "**/*.log": true,
+    "**/*.out": true,
+    "**/*.blg": true,
+    "**/*.bbl": true,
+    "sections/*.pdf": true,
+    "logo": true,
+    "report\\logo": true
+  },
+  "cSpell.enabled": true,
+  "cSpell.ignorePaths": ["utils/utils.tex", ".vscode/settings.json"]
+}
