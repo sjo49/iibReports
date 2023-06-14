@@ -1,16 +1,69 @@
 \documentclass[../main.tex]{subfiles}
 \graphicspath{{\subfix{../}}}
+\usepackage[many]{tcolorbox}
+\usepackage{marginnote}
+\usepackage{kantlipsum}
+\tcbuselibrary{skins,breakable}
+\newtcolorbox{note}[1][]{
+    width=\textwidth,
+    colback=magenta!20,
+    colframe=blue!85!black,
+    colbacktitle=blue!85!black,
+    fonttitle=\bfseries,
+    left=0ex,
+    right=0ex,
+    top=0pt,
+    arc=2pt,
+    outer arc=0pt,
+    leftrule=0pt,
+    rightrule=0pt,
+    toprule=0pt,
+    bottomrule=0pt,
+    breakable,
+    enhanced jigsaw,
+    title= #1}
+
+
 \begin{document}
+
 
 
 
 \section{Transformers}
 \subsection{Introduction}
 
-This is an introduction.
-We will use the notation from \cite{vaswani2017attention}. As a reminder, we have the following notation:
+The Transformer is a deep learning architecture introduced in \cite{vaswani2017attention}. It is a sequence-to-sequence model that uses attention to learn the relationships between the input and output sequences.
 
-\subsection{Notation}
+In this report we will follow the notation that is used in \cite{vaswani2017attention} where embeddings are represented as rows $\elof{1}{d}$ and all matrix multiplications are right multiplications. 
+
+\subsection{Embedding}
+
+A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}_i \elof{1}{d}$, where $d$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}^{(i)} \elof{1}{d}$ to the embedding $\bm{x}_i$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
+
+\begin{equation}
+	\bm{p}_j^{(i)} = \begin{cases}
+		\sin(\frac{j}{10000^{2i/d}}) & \text{if } i \text{ is even} \\
+		\cos(\frac{j}{10000^{2i/d}}) & \text{if } i \text{ is odd}
+	\end{cases}
+\end{equation}
+
+\noi where $j$ is the dimension of the positional encoding. The positional encoding is added to the embedding as follows:
+
+\begin{equation}
+	\bm{x}_i = \bm{x}_i + \bm{p}^{(i)} \elof{1}{d}
+\end{equation}
+
+\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{d}$, where $\bm{X}_{i:} = \bm{x_i}$ where $N$ is the number of words in the input sequence.
+
+\begin{note}[Alternative Positional Encoding]
+	There are many ways to go about positional encoding. Another way is to use a learned positional encoding. This is done by adding a learnable vector $\bm{p}^{(i)} \elof{1}{d}$ to the embedding. Alternatively to achieve translation equivariance, we can use \emph{Relative Positional Encoding} \cite{shaw2018selfattention, wu2021rethinking}. These positional encodings schemes will be useful when trying to build in equivariance into the Transformer model.
+\end{note}
+
+
+\subsection{Attention}
+
+The attention mechanism is a way to learn the relationships between the input and output sequences. 
+
 
 \subfilesbibliography{ref}
 
