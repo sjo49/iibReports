@@ -38,12 +38,12 @@ In this report we will follow the notation that is used in \cite{vaswani2017atte
 
 \subsection{Embedding}
 
-A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}_i \elof{1}{d}$, where $d$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}^{(i)} \elof{1}{d}$ to the embedding $\bm{x}_i$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
+A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}^{(i)} \elof{1}{d}$, where $d$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}^{(i)} \elof{1}{d}$ to the embedding $\bm{x}_i$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
 
 \begin{equation}
 	\bm{p}_j^{(i)} = \begin{cases}
-		\sin(\frac{j}{10000^{2i/d}}) & \text{if } i \text{ is even} \\
-		\cos(\frac{j}{10000^{2i/d}}) & \text{if } i \text{ is odd}
+		\sin\left(\frac{j}{10000^{2i/d}}\right) & \text{if } i \text{ is even} \\
+		\cos\left(\frac{j}{10000^{2i/d}}\right) & \text{if } i \text{ is odd}
 	\end{cases}
 \end{equation}
 
@@ -53,7 +53,7 @@ A machine is not capable of understand wordings, hence we need to transform it i
 	\bm{x}_i = \bm{x}_i + \bm{p}^{(i)} \elof{1}{d}
 \end{equation}
 
-\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{d}$, where $\bm{X}_{i:} = \bm{x_i}$ where $N$ is the number of words in the input sequence.
+\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{d}$, where $\bm{X}_{i:} = \bm{x}^{(i)}$ where $N$ is the number of words in the input sequence.
 
 \begin{note}[Alternative Positional Encoding]
 	There are many ways to go about positional encoding. Another way is to use a learned positional encoding. This is done by adding a learnable vector $\bm{p}^{(i)} \elof{1}{d}$ to the embedding. Alternatively to achieve translation equivariance, we can use \emph{Relative Positional Encoding} \cite{shaw2018selfattention, wu2021rethinking}. These positional encodings schemes will be useful when trying to build in equivariance into the Transformer model.
