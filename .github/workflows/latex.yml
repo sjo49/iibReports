@@ -14,4 +14,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: build.pdf
+          path: main.pdf
+      - name: Release PDF file
+        uses: softprops/action-gh-release@v3
+        with:
+          files: main.pdf
+          tag_name: ${{ github.sha }}
+          body: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
