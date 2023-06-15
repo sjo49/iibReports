@@ -9,10 +9,16 @@
     "**/*.out": true,
     "**/*.blg": true,
     "**/*.bbl": true,
+    "**/*.bcf": true,
+    "**/*.run.xml": true,
     "sections/*.pdf": true,
     "logo": true,
     "report\\logo": true
   },
   "cSpell.enabled": true,
-  "cSpell.ignorePaths": ["utils/utils.tex", ".vscode/settings.json"]
+  "cSpell.ignorePaths": [
+    "utils/utils.tex",
+    ".vscode/settings.json",
+    "sections/*.txt"
+  ]
 }

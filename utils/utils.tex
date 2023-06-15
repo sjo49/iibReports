@@ -44,8 +44,11 @@
 \usepackage{tabularx}
 \usepackage{multicol}
 \usepackage{bm}
+\usepackage[
+backend=biber,
+style=alphabetic,
+]{biblatex}
 
-\usepackage{subfiles}
 
 % \usepackage{tikz}
 % \usepackage{pgfplots}
@@ -175,20 +178,6 @@
 	
 }
 
-\newcommand{\img}[4]{
-	
-	\begin{figure}[htpb!]
-		\begin{center}
-			\includegraphics[width=#2 \linewidth, height =   \textheight, keepaspectratio]{#1} 
-			\caption{#3}
-			\label{fig:#4}      
-		\end{center}
-		    
-	\end{figure}
-	\FloatBarrier
-	\noindent
-}
-
 \newcommand{\darkmode}{
 	\pagecolor[rgb]{0.12156862745
 		,0.12156862745
@@ -202,43 +191,11 @@
 
 }
 
-\newcommand{\bul}[1]{\begin{itemize}
-	#1
-	\end{itemize}}
 
 % \newcommand{\num}[1]{\begin{enumerate}
 % 	#1
 % 	\end{enumerate}}
 
-\newcommand{\twoimg}[8]{
-	
-	\begin{figure}[h]
-		\centering
-		\begin{minipage}{.5\textwidth}
-			\centering
-			\includegraphics[width=#2\linewidth]{#1}
-			\captionof{figure}{#3}
-			\label{fig:#4}
-		\end{minipage}%
-		\begin{minipage}{.5\textwidth}
-			\centering
-			\includegraphics[width=#6\linewidth]{#5}
-			\captionof{figure}{#7}
-			\label{fig:#8}
-		\end{minipage}
-	\end{figure}
-	% \FloatBarrier
-}
-
-\newcommand{\eq}[2][10]{
-\begingroup
-\fontsize{#1}{#1}
-\begin{align*}
-	#2
-\end{align*}
-\endgroup
-
-}
 
 \newcommand{\fontsz}[1]{
 	\fontsize{#1}{#1}

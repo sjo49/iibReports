@@ -2,6 +2,11 @@
 \usepackage{import}
 \import{utils/}{utils.TeX}
 \import{utils/}{math.TeX}
+\import{utils/}{env.TeX}
+\usepackage{subfiles}
+
+\providecommand{\topdir}{.}
+\addglobalbib{\topdir/ref.bib}
 
 % Uncomment to remove dark mode
 % \darkmode 
@@ -12,33 +17,18 @@
 }
 \date{\today}
 
-\bibliographystyle{apalike}
-
-\makeatletter
-% curse you, \@onlypreamble\@ifclassloaded
-\newcommand*{\subfilesbibliography}[1]{%
- \expandafter\ifx\csname ver@subfiles.cls\endcsname\relax
-   \expandafter\@secondoftwo
- \else
-   \expandafter\@firstoftwo
-  \fi
-  {\bibliography{#1}}
-  {}%
-}
-\makeatother
-
-
 \begin{document}
 \createnotestitlepage 
 
 
 
 \subfile{sections/transformer}
-\subfile{sections/neural-process}
+% \subfile{sections/neural-process}
 
 
 
-\bibliography{sections/ref}
+\printbibliography[heading=bibintoc]{}
+
 
 
 \newpage

@@ -1,33 +1,10 @@
+\providecommand{\topdir}{..}
 \documentclass[../main.tex]{subfiles}
 \graphicspath{{\subfix{../}}}
-\usepackage[many]{tcolorbox}
-\usepackage{marginnote}
-\usepackage{kantlipsum}
-\tcbuselibrary{skins,breakable}
-\newtcolorbox{note}[1][]{
-    width=\textwidth,
-    colback=magenta!20,
-    colframe=blue!85!black,
-    colbacktitle=blue!85!black,
-    fonttitle=\bfseries,
-    left=0ex,
-    right=0ex,
-    top=0pt,
-    arc=2pt,
-    outer arc=0pt,
-    leftrule=0pt,
-    rightrule=0pt,
-    toprule=0pt,
-    bottomrule=0pt,
-    breakable,
-    enhanced jigsaw,
-    title= #1}
+
 
 
 \begin{document}
-
-
-
 
 \section{Transformers}
 \subsection{Introduction}
@@ -38,10 +15,10 @@ In this report we will follow the notation that is used in \cite{vaswani2017atte
 
 \subsection{Embedding}
 
-A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}^{(i)} \elof{1}{d}$, where $d$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}^{(i)} \elof{1}{d}$ to the embedding $\bm{x}_i$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
+A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}\isup{i} \elof{1}{d}$, where $d$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}\isup{i} \elof{1}{d}$ to the embedding $\bm{x}_i$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
 
 \begin{equation}
-	\bm{p}_j^{(i)} = \begin{cases}
+	\bm{p}_j\isup{i} = \begin{cases}
 		\sin\left(\frac{j}{10000^{2i/d}}\right) & \text{if } i \text{ is even} \\
 		\cos\left(\frac{j}{10000^{2i/d}}\right) & \text{if } i \text{ is odd}
 	\end{cases}
@@ -50,23 +27,54 @@ A machine is not capable of understand wordings, hence we need to transform it i
 \noi where $j$ is the dimension of the positional encoding. The positional encoding is added to the embedding as follows:
 
 \begin{equation}
-	\bm{x}_i = \bm{x}_i + \bm{p}^{(i)} \elof{1}{d}
+	\bm{x}\isup{i} = \bm{x}\isup{i} + \bm{p}\isup{i} \elof{1}{d}
 \end{equation}
 
-\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{d}$, where $\bm{X}_{i:} = \bm{x}^{(i)}$ where $N$ is the number of words in the input sequence.
+\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{d}$, where $\bm{X}_{i:} = \bm{x}\isup{i}$ where $N$ is the number of words in the input sequence.
 
 \begin{note}[Alternative Positional Encoding]
-	There are many ways to go about positional encoding. Another way is to use a learned positional encoding. This is done by adding a learnable vector $\bm{p}^{(i)} \elof{1}{d}$ to the embedding. Alternatively to achieve translation equivariance, we can use \emph{Relative Positional Encoding} \cite{shaw2018selfattention, wu2021rethinking}. These positional encodings schemes will be useful when trying to build in equivariance into the Transformer model.
+	There are many ways to go about positional encoding. Another way is to use a learned positional encoding. This is done by adding a learnable vector $\bm{p}\isup{i} \elof{1}{d}$ to the embedding. Alternatively to achieve translation equivariance, we can use \emph{Relative Positional Encoding} \cite{shaw2018selfattention, wu2021rethinking}. These positional encodings schemes will be useful when trying to build in equivariance into the Transformer model.
 \end{note}
 
 
-\subsection{Attention}
+\subsection{(Self-)Attention}
 
-The attention mechanism is a way to learn the relationships between the input and output sequences. 
+The attention mechanism is a way to learn the relationships between the input and output sequences. `Normal' attention infers what the most important word/phrase in a input sentence is which is not very powerful. This is where the idea of \emph{self-attention} comes in. Self-attention is a way to learn the relationships between the words in the input sequence itself (Note when we say attention from now on, we mean self-attention). 
+
+In the transformer models we will used the embeddings $\bm{X} \elof{N}{d}$ as the input to generate a query $\bm{Q} \elof{N}{d_k}$, a key $\bm{K} \elof{N}{d_k}$ and a value $\bm{V} \elof{N}{d_v}$ matrices via a simple linear transformation matrix $\bm{W^Q} \elof{d}{d_k}$, $\bm{W^K} \elof{d}{d_k}$ and $\bm{W^V} \elof{d}{d_v}$ respectively. Where each row of the matrices are the query, key and value vectors for each word in the input sequence. The query, key and value matrices are then used to compute the attention matrix $\bm{A} \elof{N}{N}$ as follows:
+
+\begin{equation}
+    \bm{A} = \text{softmax}\left(\frac{\bm{Q}\bm{K}^T}{\sqrt{d_k}}\right)
+\end{equation}
+
+\noi The intuition behind this is that we want to compute the similarity between the query and the key vectors as such we use the dot product between the query and key vectors. The softmax is used to normalize the attention matrix so that the rows sum to 1. The softmax is also scaled by $\sqrt{d_k}$ to prevent the softmax from saturating. The attention matrix is then used to compute the output matrix $\bm{Y} \elof{N}{d_v}$ as follows:
+
+\begin{equation}
+    \bm{Y} = \bm{A}\bm{V}
+\end{equation}
+
+\begin{note}[Attention Mechanisms]
+
+There are many ways to compute the attention matrix $\bm{A}$. The one that is used in the original transformer paper is called \emph{Scaled Dot-Product Attention}. There are other attention mechanisms which may be of interest
+
+\end{note}
+
+The overall attention function for a layer is given by:
+
+\begin{equation}
+    \text{Attention}(\bm{Q}, \bm{K}, \bm{V}) = \text{softmax}\left(\frac{\bm{Q}\bm{K}^T}{\sqrt{d_k}}\right)\bm{V}
+\end{equation}
+
+\subsection{Multi-Head Self-Attention}
 
 
-\subfilesbibliography{ref}
 
+
+
+
+\ifSubfilesClassLoaded{%
+    \printbibliography{}
+}{} 
 
 
 \end{document}
