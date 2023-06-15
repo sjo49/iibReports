@@ -19,14 +19,14 @@ jobs:
       #   with:
       #     name: PDF
       #     path: main.pdf
-    - name: Generate release tag
-      id: tag
-      run: |
-        echo "::set-output name=release_tag::build_$(date +"%Y.%m.%d")"
-    - name: Release user firmware
-      uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        files: main.pdf
+      - name: Generate release tag
+        id: tag
+        run: |
+          echo "::set-output name=release_tag::build_$(date +"%Y.%m.%d")"
+      - name: Release user firmware
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: main.pdf
