@@ -1,9 +1,7 @@
+\providecommand{\topdir}{..}
 \documentclass[../main.tex]{subfiles}
 \graphicspath{{\subfix{../}}}
 \begin{document}
-
-% Allow for citations in subfiles to be found
-
 
 
 \section{Neural Processes}
@@ -11,8 +9,9 @@
 Neural Processes are an expansion of Gaussian Processes using Neural Networks introduced in \cite{garnelo2018neural}
 
 
-\subfilesbibliography{ref}
-
+\ifSubfilesClassLoaded{%
+    \printbibliography{}
+}{} 
 
 
 \end{document}
