@@ -16,7 +16,7 @@ jobs:
           name: PDF
           path: main.pdf
       - name: Release PDF file
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release
         with:
           files: main.pdf
           tag_name: ${{ github.sha }}
