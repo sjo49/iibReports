@@ -11,29 +11,30 @@
 
 The Transformer is a deep learning architecture introduced in \cite{vaswani2017attention}. It is a sequence-to-sequence model that uses attention to learn the relationships between the input and output sequences.
 
-In this report we will follow the notation that is used in \cite{vaswani2017attention} where embeddings are represented as rows $\elof{1}{d}$ and all matrix multiplications are right multiplications. 
+In this report we will follow the notation that is used in \cite{vaswani2017attention} where embeddings are represented as rows $\elof{1}{D}$ and all matrix multiplications are right multiplications. 
 
 \subsection{Embedding}
 
-A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}\isup{i} \elof{1}{d}$, where $d$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}\isup{i} \elof{1}{d}$ to the embedding $\bm{x}_i$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
+A machine is not capable of understand wordings, hence we need to transform it into a vector representation called an \emph{embedding}. Let us denote the embedding of the $i$-th word in the input sequence as $\bm{x}\isup{i} \elof{1}{D}$, where $D$ is the feature dimension. The transformer is able to process these embeddings in \textbf{parallel} so we need a way to encode the position of the word in the sequence. We do this by adding a positional encoding $\bm{p}\isup{i} \elof{1}{D}$ to the embedding $\bm{x}\isup{i}$. The positional encoding is a vector that is unique to the position of the word in the sequence. The positional encoding that is used in \cite{vaswani2017attention} is given by:
 
 \begin{equation}
 	\bm{p}_j\isup{i} = \begin{cases}
-		\sin\left(\frac{j}{10000^{2i/d}}\right) & \text{if } i \text{ is even} \\
-		\cos\left(\frac{j}{10000^{2i/d}}\right) & \text{if } i \text{ is odd}
+		\sin\left(\frac{i}{10000^{j/D}}\right) & \text{if } j \text{ is even} \\
+		\cos\left(\frac{i}{10000^{(j-1)/D}}\right) & \text{if } j \text{ is odd}
 	\end{cases}
 \end{equation}
 
 \noi where $j$ is the dimension of the positional encoding. The positional encoding is added to the embedding as follows:
 
 \begin{equation}
-	\bm{x}\isup{i} = \bm{x}\isup{i} + \bm{p}\isup{i} \elof{1}{d}
+	\bm{x}\isup{i} \leftarrow  \bm{x}\isup{i} + \bm{p}\isup{i} \elof{1}{D}
 \end{equation}
 
-\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{d}$, where $\bm{X}_{i:} = \bm{x}\isup{i}$ where $N$ is the number of words in the input sequence.
+\noi These are all stacked together to form the input matrix $\bm{X} \elof{N}{D}$, where $\bm{X}_{i:} = \bm{x}\isup{i}$ where $N$ is the number of words in the input sequence.
 
 \begin{note}[Alternative Positional Encoding]
-	There are many ways to go about positional encoding. Another way is to use a learned positional encoding. This is done by adding a learnable vector $\bm{p}\isup{i} \elof{1}{d}$ to the embedding. Alternatively to achieve translation equivariance, we can use \emph{Relative Positional Encoding} \cite{shaw2018selfattention, wu2021rethinking}. These positional encodings schemes will be useful when trying to build in equivariance into the Transformer model.
+	There are many ways to go about positional encoding. Another way is to use a learned positional encoding. This is done by adding a learnable vector $\bm{p}\isup{i} \elof{1}{D}$ to the embedding. Alternatively to achieve translation equivariance, we can use \emph{Relative Positional Encoding} \cite{shaw2018selfattention, wu2021rethinking}. These positional encodings schemes will be useful when trying to build in equivariance into the Transformer model. See 
+	\cite{kazemnejad2019:pencoding} for a comparison of different positional encoding schemes.
 \end{note}
 
 
@@ -41,7 +42,16 @@ A machine is not capable of understand wordings, hence we need to transform it i
 
 The attention mechanism is a way to learn the relationships between the input and output sequences. `Normal' attention infers what the most important word/phrase in a input sentence is which is not very powerful. This is where the idea of \emph{self-attention} comes in. Self-attention is a way to learn the relationships between the words in the input sequence itself (Note when we say attention from now on, we mean self-attention). 
 
-In the transformer models we will used the embeddings $\bm{X} \elof{N}{d}$ as the input to generate a query $\bm{Q} \elof{N}{d_k}$, a key $\bm{K} \elof{N}{d_k}$ and a value $\bm{V} \elof{N}{d_v}$ matrices via a simple linear transformation matrix $\bm{W^Q} \elof{d}{d_k}$, $\bm{W^K} \elof{d}{d_k}$ and $\bm{W^V} \elof{d}{d_v}$ respectively. Where each row of the matrices are the query, key and value vectors for each word in the input sequence. The query, key and value matrices are then used to compute the attention matrix $\bm{A} \elof{N}{N}$ as follows:
+In the transformer models we will used the embeddings $\bm{X} \elof{N}{D}$ as the input to generate a query $\bm{Q} \elof{N}{d_k}$, a key $\bm{K} \elof{N}{d_k}$ and a value $\bm{V} \elof{N}{d_v}$ matrices via a simple linear transformation matrix $\bm{W^Q} \elof{D}{d_k}$, $\bm{W^K} \elof{D}{d_k}$ and $\bm{W^V} \elof{D}{d_v}$ respectively. 
+
+\begin{align*}
+	\bm{Q} &= \bm{X}\bm{W^Q} \elof{N}{d_k}\\
+	\bm{K} &= \bm{X}\bm{W^K} \elof{N}{d_k}\\
+	\bm{V} &= \bm{X}\bm{W^V} \elof{N}{d_v}
+\end{align*}
+
+
+Where each row of the matrices are the query, key and value vectors for each word in the input sequence. The query, key and value matrices are then used to compute the attention matrix $\bm{A} \elof{N}{N}$ as follows:
 
 \begin{equation}
     \bm{A} = \text{softmax}\left(\frac{\bm{Q}\bm{K}^T}{\sqrt{d_k}}\right)
@@ -55,7 +65,7 @@ In the transformer models we will used the embeddings $\bm{X} \elof{N}{d}$ as th
 
 \begin{note}[Attention Mechanisms]
 
-There are many ways to compute the attention matrix $\bm{A}$. The one that is used in the original transformer paper is called \emph{Scaled Dot-Product Attention}. There are other attention mechanisms which may be of interest
+There are many ways to compute the attention matrix $\bm{A}$. The one that is used in the original transformer paper is called \emph{Scaled Dot-Product Attention}. There are other attention mechanisms which may be of interest, see \cite{weng2018attention} for a comparison of different attention mechanisms.
 
 \end{note}
 
@@ -67,7 +77,25 @@ The overall attention function for a layer is given by:
 
 \subsection{Multi-Head Self-Attention}
 
+So far we have only computed the attention matrix $\bm{A}$ once so the model only learns one attention relationship, however we can take advantage of using multiple attention `heads' in parallel to learn many different attention relationships, this scheme is called the \emph{Multi-Head Attention} (MHSA). 
 
+Each individual attention head is computed using simple dot product attention however the learnable matrices are unique for each head of the MHSA, $\bm{W^Q_i} \elof{D}{d_k}$, $\bm{W^K_i} \elof{D}{d_k}$ and $\bm{W^V_i} \elof{D}{d_v}$ where $i \in [1, h]$ for a head count of $h$. Then the attention for the particular head is computed as follows:
+
+\begin{equation}
+	\bm{H}_i = \text{Attention}(\bm{X}\bm{W^Q_i}, \bm{X}\bm{W^K_i}, \bm{X}\bm{W^V_i}) \elof {N}{d_v}
+\end{equation}
+
+Then the output of the MHSA is the concatenation of the outputs of each head $\bm{H}_i$ (stacked on to of each other) multiplied by a learnable matrix $\bm{W^O} \elof{hd_v}{D}$ which transforms the concatenated output to the original dimensionality of the input sequence.
+
+\begin{align*}
+	\text{MHSA} &= \text{concat}(\bm{H}_1; \bm{H}_2; \dots; \bm{H}_h)\bm{W^O} 
+	= \begin{bmatrix}
+		\bm{H}_1 \\
+		\bm{H}_2 \\
+		\vdots \\
+		\bm{H}_h
+	\end{bmatrix} \bm{W^O} \elof{N}{D}
+\end{align*}
 
 
 
