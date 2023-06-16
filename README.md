@@ -18,6 +18,7 @@
 - [] Research and understand Convolutional Neural Processes
 - [] Research and understand AttnCNP
 - [] Research and understand TCNP
+- [] Research relative positional encodings with functional forms instead of vectors
 
 ## Implementation
 
