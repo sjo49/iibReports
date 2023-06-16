@@ -13,16 +13,16 @@
 ## Preliminary
 
 - [x] Research and understand Transformer architecture
-- [] Research and understand Neural Processes
-- [] Research and understand Deep Sets
-- [] Research and understand Convolutional Neural Processes
-- [] Research and understand AttnCNP
-- [] Research and understand TCNP
-- [] Research relative positional encodings with functional forms instead of vectors
+- [ ] Research and understand Neural Processes
+- [ ] Research and understand Deep Sets
+- [ ] Research and understand Convolutional Neural Processes
+- [ ] Research and understand AttnCNP
+- [ ] Research and understand TCNP
+- [ ] Research relative positional encodings with functional forms instead of vectors
 
 ## Implementation
 
-- [] Implement GP Data Generator
-- [] Implement CelebA Data Generator
-- [] Implement CNP and test on GP Data
-- [] Implement ConvCNP and test on GP Data
+- [ ] Implement GP Data Generator
+- [ ] Implement CelebA Data Generator
+- [ ] Implement CNP and test on GP Data
+- [ ] Implement ConvCNP and test on GP Data
