@@ -11,3 +11,6 @@
 **/*.bcf
 **/*.run.xml
 convcnp
+**/*.ttf
+.obsidian
+figures/**/*.md
