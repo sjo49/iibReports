@@ -165,7 +165,7 @@ This ensures that the decoder can only attend to previous positions in the seque
 
 The second sub-layer of the decoder is the MHSA, this is identical to the MHSA in the encoder however the keys and values come from the \textbf{encoder output} $\bm{Y}$ and the queries come from the \textbf{output of the M-MHSA sub-layer}. Intutively the encoder learns the attention of the input sequence and the decoder learns how to use query the encoder output to generate the output sequence.
 \eq{
-	\text{MHSA}_{dec} = \text{MHSA}(\bm{Q_{dev}}, \bm{K_{enc}}, \bm{V_{enc}})
+	\text{MHSA}_{dec} = \text{MHSA}(\bm{Q_{dec}}, \bm{K_{enc}}, \bm{V_{enc}})
 }
 
 The output of the $\text{MHSA}_{dec}$ is then passed through a feed-forward network and layer normalization layer as per usual. This is repeated $N$ times and the output of the final layer is the output of the decoder. This final output is then passed through a linear layer which transforms the decoder output $\elof{N}{D}$ to the output vocabulary size $\elof{N}{\mathcal{V}}$ where $\mathcal{V}$ is the vocabulary of the output language i.e the set of all possible words in the output language. The output of this linear layer is then passed through a softmax layer to generate the final predictive probability distribution over the output vocabulary. We select the word with the highest probability as the predicted word.
