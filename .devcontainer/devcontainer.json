@@ -38,11 +38,16 @@
           "*.run.xml" // Added Manually
         ],
         // Edit the following property to change export directory
+        "latex-workshop.latex.outDir": "./pdf",
         "latex-workshop.latex.autoClean.run": "onBuilt",
         "latex-workshop.latex.build.forceRecipeUsage": false,
         "latex-workshop.synctex.afterBuild.enabled": true,
         "latex-workshop.view.pdf.viewer": "tab",
         "latex-workshop.latex.clean.subfolder.enabled": true,
+        "latex-workshop.latex.magic.args": [
+          "-output-directory=pdf", // to change the output directory
+          "%DOC%"
+        ],
         // Remove / comment the next 3 lines to remove dark view for pdf
         "latex-workshop.view.pdf.color.dark.pageColorsBackground": "#171717", // For Dark Viewwer
         "latex-workshop.latex.autoBuild.run": "onFileChange",
@@ -66,7 +71,7 @@
         "James-Yu.latex-workshop",
         "GitHub.copilot",
         // Remove the line below if you do not want Live-Collaboration Feature
-        "ms-vsliveshare.vsliveshare",
+        // "ms-vsliveshare.vsliveshare",
         // Uncomment the line below if you do not want LanguageTool Support
         // "valentjn.vscode-ltex",
         // Remove the line below if you do not want Grammarly
