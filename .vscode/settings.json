@@ -13,7 +13,9 @@
     "**/*.run.xml": true,
     "sections/*.pdf": true,
     "logo": true,
-    "report\\logo": true
+    "report\\logo": true,
+    ".obsidian": true,
+    "cmbx12.ttf": true
   },
   "cSpell.enabled": true,
   "cSpell.ignorePaths": [
