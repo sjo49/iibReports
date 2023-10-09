@@ -5,7 +5,17 @@
 
 \section{Neural Processes}
 
-Neural Processes are an expansion of Gaussian Processes using Neural Networks introduced in \cite{garnelo2018neural} they are trained on a context dataset which is.
+Neural Processes are an expansion of Gaussian Processes using Neural Networks introduced in \cite{garnelo2018neural} they are trained on a context dataset which is. Neural processes are a meta-learning algorithm that can be used for few-shot learning. They are trained on a context dataset which is a set of input-output pairs $\mathcal{D} = \{ (x_i, y_i) \}_{i=1}^N$. 
+
+\subsection{Meta Learning}
+
+Meta Learning is a method of ML where the model is trained on a set of tasks and then tested on a new task. The goal is to learn a model that can learn new tasks quickly`', i.e `learning to learn'. These come under the terminology of few-shot learning where the model is trained on a small number of examples (more specifically, we can say $N$-way-$K$-shot learning where $N$ is the number of classes and $K$ is the number of examples per class).
+
+Consider a set of datasets $\mathcal{D} = \{ \mathcal{D}_i \}_{i=1}^N$ where each dataset $\mathcal{D}_i$ is a set of input-output pairs $\mathcal{D}_i = \{ (x_{ij}, y_{ij}) \}_{j=1}^{K_i}$. The goal of meta-learning is to learn a model $f$ that can learn a new task $\mathcal{D}_{N+1}$ with a small number of examples. The data used to train the model is called the context set $\mathcal{C}$ which is a set of datasets $\mathcal{C} = \{ \mathcal{D}_i \}_{i=1}^N$. The data used to query the model is called the target set, which has a support of the inputs only. Our task is to predict the outputs for the target set given the training on the context set.
+
+\subsection{Conditonal Neural Processes}
+
+Conditonal Neural Processes (CNPs) \cite{garnelo2018conditional} was introduced to integrate neural networks and Gaussian Process into a model that is able to generate a stocastic representation of the training dataset efficently with low computational complexity. 
 
 
 \ifSubfilesClassLoaded{%
