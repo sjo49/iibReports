@@ -17,6 +17,12 @@ Consider a set of datasets $\mathcal{D} = \{ \mathcal{D}_i \}_{i=1}^N$ where eac
 
 Conditional Neural Processes (CNPs) \cite{garnelo2018conditional} was introduced to integrate neural networks and Gaussian Process into a model that can generate a stochastic representation of the training dataset efficiently with low computational complexity. 
 
+\textbf{CNPs are unable to generate coherent sample paths, they are only able to product a stochastic representation of the training dataset}. 
+
+\subsection{(Latent) Neural Processes}
+
+Neural Processes or better named `Latent Neural Processes' are an extension of CNPs that are able to generate coherent sample paths. They are able to do this by using a latent variable $z$ which is created by the encoder. The sampled latent variable is then used by the decoder to generate coherent sample paths.
+
 
 \ifSubfilesClassLoaded{%
     \printbibliography{}
