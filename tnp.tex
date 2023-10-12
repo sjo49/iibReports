@@ -1,0 +1,42 @@
+\documentclass[main.tex]{subfiles}
+
+\begin{document}
+
+\section{Transformer Neural Processes}
+
+\subsection{Introduction}
+
+Transformer Neural Processes (TNPs) \cite{nguyen2023transformer} were introduced to overcome the limitations of the Latent Neural Process (LNP) \cite{garnelo2018neural} which have the following limitations:
+
+\begin{itemize}
+	\item LNPs have intracatable likelihoods hence they have to be trained using variational inference by optimizing for the ELBO. It has been shown that the ELBO can be a poor approximation of the true likelihood hence the model can be poorly trained.
+	\item LNPs tend to underfit the data and are unable to capture the complexity of the data.
+\end{itemize}
+
+TNPs overcome these limitations by using the Transformer \cite{vaswani2017attention} to utilize attention to learn the relationships between the context points. This allows the model to capture the complexity of the data and also allows the model to be trained using maximum likelihood estimation (MLE) instead of variational inference as the likelihood is tractable.
+
+Attention has already been implemented prior to \cite{nguyen2023transformer} in \cite{kim2019attentive} however according to \cite{nguyen2023transformer} the attention mechanism used in \cite{kim2019attentive} `tend to make overconfident predictions and have poor performance on sequential decision making problems'.
+
+\subsection{Requirements}
+
+As NPs are a meta learning method it should be trained on a context set which is a subset of a larger dataset. In this example, say we sample $N$ $x-y$ pairs from a process $\mathcal{F}$, we designate the first $N_c$ pairs as the context set and the remaining $N-N_c$ pairs as the target set, or mathematically $\mathcal{C} = \{(x_i, y_i)\}_{i=1}^{N_c}$ and $\mathcal{T} = \{(x_i, y_i)\}_{i=N_c+1}^{N}$. The objective function is the maximum likelihood estimation of the target set given the context set autorergressively, or mathematically on the target set.
+
+
+\begin{equation}
+	\mathcal{L}(\theta) = \mathbb{E}_{(x, y) \sim \mathcal{F}} \left[ \log p(y_{N_c+1:N} | x_{N_c+1:N}, \mathcal{C}; \theta) \right]
+	\end{equation}
+
+Where $\theta$ are the parameters of the model and $y_{N_c+1:N}$ and $x_{N_c+1:N}$ are the target set. Since we pass the target set through the model autoregressively, the objective function can be rewritten as:
+
+\begin{equation}
+	\mathcal{L}(\theta) = \mathbb{E}_{(x, y) \sim \mathcal{F}} \left[ \sum_{i=N_c+1}^{N} \log p(y_i | x_i, \mathcal{C}, x_{N_c+1:i-1}, y_{N_c+1:i-1}; \theta) \right]
+\end{equation}
+
+Where each conditional is modeled as a Gaussian distribution with mean and variance predicted by the model. 
+
+\ifSubfilesClassLoaded{%
+    \printbibliography{}
+}{} 
+
+
+\end{document}
