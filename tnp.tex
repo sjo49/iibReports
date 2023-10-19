@@ -15,11 +15,11 @@ Transformer Neural Processes (TNPs) \cite{nguyen2023transformer} were introduced
 
 TNPs overcome these limitations by using the Transformer \cite{vaswani2017attention} to utilize attention to learn the relationships between the context points. This allows the model to capture the complexity of the data and also allows the model to be trained using maximum likelihood estimation (MLE) instead of variational inference as the likelihood is tractable.
 
-Attention has already been implemented prior to \cite{nguyen2023transformer} in \cite{kim2019attentive} however according to \cite{nguyen2023transformer} the attention mechanism used in \cite{kim2019attentive} `tend to make overconfident predictions and have poor performance on sequential decision making problems'.
+Attention has already been implemented before \cite{nguyen2023transformer} in \cite{kim2019attentive} however according to \cite{nguyen2023transformer} the attention mechanism used in \cite{kim2019attentive} tends to make overconfident predictions and have poor performance on sequential decision-making problems.
 
 \subsection{Requirements}
 
-As NPs are a meta learning method it should be trained on a context set which is a subset of a larger dataset. In this example, say we sample $N$ $x-y$ pairs from a process $\mathcal{F}$, we designate the first $N_c$ pairs as the context set and the remaining $N-N_c$ pairs as the target set, or mathematically $\mathcal{C} = \{(x_i, y_i)\}_{i=1}^{N_c}$ and $\mathcal{T} = \{(x_i, y_i)\}_{i=N_c+1}^{N}$. The objective function is the maximum likelihood estimation of the target set given the context set autorergressively, or mathematically on the target set.
+As NPs are a meta-learning method they should be trained on a context set which is a subset of a larger dataset. In this example, say we sample $N$ $x-y$ pairs from a process $\mathcal{F}$, we designate the first $N_c$ pairs as the context set and the remaining $N-N_c$ pairs as the target set, or mathematically $\mathcal{C} = \{(x_i, y_i)\}_{i=1}^{N_c}$ and $\mathcal{T} = \{(x_i, y_i)\}_{i=N_c+1}^{N}$. The objective function is the maximum likelihood estimation of the target set given the context set autoregressively, or mathematically on the target set.
 
 
 \begin{equation}
@@ -49,7 +49,7 @@ We can not implement the traditional Transformer as the inclusion of the positio
 	 {(x_1, y_1), . . . ,(x_N , y_N ),(x_{N_c+1}, 0), . . . ,(x_N , 0)}
 \]
 
-As we can see the $x$ values from the target set effectively appear twice, the auxillary tokens are used to represent the target set and then the corresponding $y$ values are used to train the model since those tokens are not auxillary tokens. To make this work, we must emply a masking scheme to allow:
+As we can see the $x$ values from the target set effectively appear twice, the auxiliary tokens are used to represent the target set and then the corresponding $y$ values are used to train the model since those tokens are not auxiliary. To make this work, we must employ a masking scheme to allow:
 
 \bul{
 	\item Context tokens to attend to themselves
