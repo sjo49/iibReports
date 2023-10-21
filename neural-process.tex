@@ -11,15 +11,59 @@ Neural Processes are an expansion of Gaussian Processes using Neural Networks in
 
 Meta-Learning is a method of ML where the model is trained on a set of tasks and then tested on a new task. The goal is to learn a model that can learn new tasks quickly`', i.e. `learning to learn'. These come under the terminology of few-shot learning where the model is trained on a small number of examples (more specifically, we can say $N$-way-$K$-shot learning where $N$ is the number of classes and $K$ is the number of examples per class).
 
-Consider a set of datasets $\mathcal{D} = \{ \mathcal{D}_i \}_{i=1}^N$ where each dataset $\mathcal{D}_i$ is a set of input-output pairs $\mathcal{D}_i = \{ (x_{ij}, y_{ij}) \}_{j=1}^{K_i}$. The goal of meta-learning is to learn a model $f$ that can learn a new task $\mathcal{D}_{N+1}$ with a small number of examples. The data used to train the model is called the context set $\mathcal{C}$ which is a set of datasets $\mathcal{C} = \{ \mathcal{D}_i \}_{i=1}^N$. The data used to query the model is called the target set, which has the support of the inputs only. Our task is to predict the outputs for the target set given the training on the context set.
+Consider a set of datasets $\mathcal{D} = \{ \mathcal{D}_i \}_{i=1}^D$ where each dataset $\mathcal{D}_i$ is a set of input-output pairs $\mathcal{D}_i = \{ (x_{ij}, y_{ij}) \}_{j=1}^{N_i}$. The goal of meta-learning is to learn a model $f$ that can learn a new task $\mathcal{D}_{N+1}$ with a small number of examples, i.e. few shot learning.
+
+\subsection{Neural Processes}
+
+A meta-dataset is split into two sets, the context set and the target set (also called the query set) where the sets are disjoint $\mathcal{D} = \mathcal{C} \cup \mathcal{T}$ and $\mathcal{C} \cap \mathcal{T} = \emptyset$. The model is trained on the context set and then tested on the target set to see how well it can generalize to new tasks. In essence, our task is to predict the outputs for the target conditioned on the training of the context set.
+
+To achieve this we used a neural network (usually MLPs) to encode the context set into embeddings. 
+
+\begin{equation}
+    \mathbf{r(\mathcal{C}_i)} = \text{Enc}_\theta(\mathcal{C}_i) = \text{Enc}_\theta(\{ \bm{x_{i}\isup{c}}, \bm{y_i\isup{c}} \})
+\end{equation}
+
+Where $\mathbf{r_i}$ is the embedding of the context set $\mathcal{C}_i$ and $\theta$ are the parameters of the encoder. Then we aggregate the embeddings of the context sets to get a global representation of the dataset. 
+
+\begin{equation}
+    \mathbf{R(\mathcal{C})} = \text{Agg}(\{ r(\mathcal{C}_i) \}_{i=1}^D)
+\end{equation}
+
+Typically the aggregation function is a simple summation of the embeddings. The global representation $\mathbf{R}$ is then used to condition the decoder to predict the outputs of the target set $\mathcal{T} = \{ \bm{x_{i}\isup{t}} \}$ to give us a posterior distribution over the outputs $\bm{y_i\isup{t}}$.
+
+\begin{equation}
+    p(\bm{y_i\isup{t}} | \bm{x_i\isup{t}}, \mathcal{C}_i) = \text{Dec}_\theta(\bm{x_i\isup{t}}, \mathbf{R(\mathcal{C}_i)})
+\end{equation}
+
+\subsection{Neural Processes vs Gaussian Processes}
+
+From this it is clear that NPs achieve a \emph{prediction} map, $\pi$ which maps the context set to the target set into a posterior distribution over the outputs. 
+
+\begin{equation}
+    \pi: \mathcal{C} \times \mathcal{X}\isup{t} \rightarrow \mathcal{P}(\mathcal{Y})
+\end{equation}
+
+
+This illustrates the similarity to Gaussian Processes (GP) \cite{books/lib/RasmussenW06} which perform the same underlying task of predicting the outputs of a target set conditioned on a context set. The difference is that GPs use a kernel function to compute the covariance between the context and target sets whereas NPs use a neural network to compute the covariance.
+
+\begin{align}
+    &\text{GP}: \pi \rightarrow \mathcal{N}(m(
+    \mathcal{C}, \bm{x}\isup{t})
+    ), k(\bm{x}\isup{c}, \bm{x}\isup{t})) \\
+    &\text{NP}: \pi \rightarrow \text{Dec}_\theta(\bm{x}\isup{t},  
+    \text{Agg}(\{ \text{Enc}_\theta(\mathcal{C}_i) \}_{i=1}^D))
+\end{align}
+
+
+
 
 \subsection{Conditonal Neural Processes}
 
 Conditional Neural Processes (CNPs) \cite{garnelo2018conditional} was introduced to integrate neural networks and Gaussian Process into a model that can generate a stochastic representation of the training dataset efficiently with low computational complexity. 
 
-\textbf{CNPs are unable to generate coherent sample paths, they are only able to product a stochastic representation of the training dataset}. 
+\textbf{CNPs are unable to generate coherent sample paths, they are only able to produce a stochastic representation of the training dataset}. 
 
-\subsection{(Latent) Neural Processes}
+\subsection{Latent Neural Processes}
 
 Neural Processes or better named `Latent Neural Processes' are an extension of CNPs that are able to generate coherent sample paths. They are able to do this by using a latent variable $z$ which is created by the encoder. The sampled latent variable is then used by the decoder to generate coherent sample paths.
 
