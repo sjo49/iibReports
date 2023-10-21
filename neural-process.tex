@@ -59,13 +59,29 @@ This illustrates the similarity to Gaussian Processes (GP) \cite{books/lib/Rasmu
 
 \subsection{Conditonal Neural Processes}
 
-Conditional Neural Processes (CNPs) \cite{garnelo2018conditional} was introduced to integrate neural networks and Gaussian Process into a model that can generate a stochastic representation of the training dataset efficiently with low computational complexity. 
+Conditional Neural Processes (CNPs) \cite{garnelo2018conditional} was one of the two original Neural Processes introduced by Garnelo et al. in 2018. Using the architecture framework described above, CNPs can be described as follows.
 
-\textbf{CNPs are unable to generate coherent sample paths, they are only able to produce a stochastic representation of the training dataset}. 
+\begin{align*}
+    \text{Enc}_{\theta_e} = \text{MLP}_{\theta_e} \\
+    \text{Agg} = \text{Sum} \\
+    \text{Dec}_{\theta_d}  = \text{MLP}_{\theta_d} 
+\end{align*}
+
+The encoding and summation is an implementation of the `DeepSet' architecture \cite{zaheer2018deep} which is a neural network that is \textbf{Permutation Invariant} (PI) due to the summation operation. This means that the order of the input does not matter. 
+
+
+CNPs make the strong assumption that the poster distribution \emph{factorizes} over the target points. This means that the posterior distribution over the target points is independent of each other. 
+
+\eq{
+    p(\bm{y}\isup{t} | \bm{x}\isup{t}, \mathcal{C}) = \prod_{i=1}^{N\isup{t}} p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \bm{R}(\mathcal{C}))
+}
+
+The benefit of this assumption is that the model can scale linearly with the number of target points with a tractable likelihood. However, this assumption means
+\textbf{CNPs are unable to generate coherent sample paths, they are only able to produce distributions over the target points.}
 
 \subsection{Latent Neural Processes}
 
-Neural Processes or better named `Latent Neural Processes' are an extension of CNPs that are able to generate coherent sample paths. They are able to do this by using a latent variable $z$ which is created by the encoder. The sampled latent variable is then used by the decoder to generate coherent sample paths.
+Neural Processes or better named `Latent Neural Processes' are an extension of CNPs that can generate coherent sample paths. They can do this by using a latent variable $z$ which is created by the encoder. The sampled latent variable is then used by the decoder to generate coherent sample paths.
 
 
 \ifSubfilesClassLoaded{%
