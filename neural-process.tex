@@ -23,16 +23,16 @@ To achieve this we used a neural network (usually MLPs) to encode the context se
     \bm{r}(\mathcal{C}_i) = \text{Enc}_\theta(\mathcal{C}_i) = \text{Enc}_\theta(\{ \bm{x}_{i}\isup{c}, \bm{y}_i\isup{c} \})
 \end{equation}
 
-Where $\mathbf{r_i}$ is the embedding of the context set $\mathcal{C}_i$ and $\theta$ are the parameters of the encoder. Then we aggregate the embeddings of the context sets to get a global representation of the dataset. 
+Where $\bm{r}$ is the embedding of the context set $\mathcal{C}_i$ and $\theta$ are the parameters of the encoder. Then we aggregate the embeddings of the context sets to get a global representation of the dataset. 
 
 \begin{equation}
-    \bm{R(\mathcal{C})} = \text{Agg}(\{ \bm(r)(\mathcal{C}_i) \}_{i=1}^D)
+    \bm{R}(\mathcal{C}) = \text{Agg}(\{ \bm{r}(\mathcal{C}_i) \}_{i=1}^D)
 \end{equation}
 
-Typically the aggregation function is a simple summation of the embeddings. The global representation $\bm{R}$ is then used to condition the decoder to predict the outputs of the target set $\mathcal{T} = \{ \bm{x_{i}\isup{t}} \}$ to give us a posterior distribution over the outputs $\bm{y_i\isup{t}}$.
+Typically the aggregation function is a simple summation of the embeddings. The global representation $\bm{R}$ is then used to condition the decoder to predict the outputs of the target set $\mathcal{T} = \{ \bm{x}_{i}\isup{t} \}$ to give us a posterior distribution over the outputs $\bm{y_i\isup{t}}$.
 
 \begin{equation}
-    p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \mathcal{C}_i) = \text{Dec}_\theta(\bm{x}_i\isup{t}, \bm{R(\mathcal{C}_i)})
+    p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \mathcal{C}_i) = \text{Dec}_\theta(\bm{x}_i\isup{t}, \bm{R}(\mathcal{C}_i))
 \end{equation}
 
 \subsection{Neural Processes vs Gaussian Processes}
