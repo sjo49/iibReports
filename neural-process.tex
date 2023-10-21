@@ -13,26 +13,26 @@ Meta-Learning is a method of ML where the model is trained on a set of tasks and
 
 Consider a set of datasets $\mathcal{D} = \{ \mathcal{D}_i \}_{i=1}^D$ where each dataset $\mathcal{D}_i$ is a set of input-output pairs $\mathcal{D}_i = \{ (x_{ij}, y_{ij}) \}_{j=1}^{N_i}$. The goal of meta-learning is to learn a model $f$ that can learn a new task $\mathcal{D}_{N+1}$ with a small number of examples, i.e. few shot learning.
 
-\subsection{Neural Processes}
+\subsection{Architecture}
 
 A meta-dataset is split into two sets, the context set and the target set (also called the query set) where the sets are disjoint $\mathcal{D} = \mathcal{C} \cup \mathcal{T}$ and $\mathcal{C} \cap \mathcal{T} = \emptyset$. The model is trained on the context set and then tested on the target set to see how well it can generalize to new tasks. In essence, our task is to predict the outputs for the target conditioned on the training of the context set.
 
 To achieve this we used a neural network (usually MLPs) to encode the context set into embeddings. 
 
 \begin{equation}
-    \mathbf{r(\mathcal{C}_i)} = \text{Enc}_\theta(\mathcal{C}_i) = \text{Enc}_\theta(\{ \bm{x_{i}\isup{c}}, \bm{y_i\isup{c}} \})
+    \bm{r}(\mathcal{C}_i) = \text{Enc}_\theta(\mathcal{C}_i) = \text{Enc}_\theta(\{ \bm{x}_{i}\isup{c}, \bm{y}_i\isup{c} \})
 \end{equation}
 
 Where $\mathbf{r_i}$ is the embedding of the context set $\mathcal{C}_i$ and $\theta$ are the parameters of the encoder. Then we aggregate the embeddings of the context sets to get a global representation of the dataset. 
 
 \begin{equation}
-    \mathbf{R(\mathcal{C})} = \text{Agg}(\{ r(\mathcal{C}_i) \}_{i=1}^D)
+    \bm{R(\mathcal{C})} = \text{Agg}(\{ \bm(r)(\mathcal{C}_i) \}_{i=1}^D)
 \end{equation}
 
-Typically the aggregation function is a simple summation of the embeddings. The global representation $\mathbf{R}$ is then used to condition the decoder to predict the outputs of the target set $\mathcal{T} = \{ \bm{x_{i}\isup{t}} \}$ to give us a posterior distribution over the outputs $\bm{y_i\isup{t}}$.
+Typically the aggregation function is a simple summation of the embeddings. The global representation $\bm{R}$ is then used to condition the decoder to predict the outputs of the target set $\mathcal{T} = \{ \bm{x_{i}\isup{t}} \}$ to give us a posterior distribution over the outputs $\bm{y_i\isup{t}}$.
 
 \begin{equation}
-    p(\bm{y_i\isup{t}} | \bm{x_i\isup{t}}, \mathcal{C}_i) = \text{Dec}_\theta(\bm{x_i\isup{t}}, \mathbf{R(\mathcal{C}_i)})
+    p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \mathcal{C}_i) = \text{Dec}_\theta(\bm{x}_i\isup{t}, \bm{R(\mathcal{C}_i)})
 \end{equation}
 
 \subsection{Neural Processes vs Gaussian Processes}
