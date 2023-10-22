@@ -32,7 +32,7 @@ Where $\bm{r}$ is the embedding of the context set $\mathcal{C}_i$ and $\theta$ 
 Typically the aggregation function is a simple summation of the embeddings. The global representation $\bm{R}$ is then used to condition the decoder to predict the outputs of the target set $\mathcal{T} = \{ \bm{x}_{i}\isup{t} \}$ to give us a posterior distribution over the outputs $\bm{y_i\isup{t}}$.
 
 \begin{equation}
-    p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \mathcal{C}_i) = \text{Dec}_\theta(\bm{x}_i\isup{t}, \bm{R}(\mathcal{C}_i))
+    p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \mathcal{C}) = \text{Dec}_\theta(\bm{x}_i\isup{t}, \bm{R}(\mathcal{C}))
 \end{equation}
 
 \subsection{Neural Processes vs Gaussian Processes}
@@ -62,9 +62,9 @@ This illustrates the similarity to Gaussian Processes (GP) \cite{books/lib/Rasmu
 Conditional Neural Processes (CNPs) \cite{garnelo2018conditional} was one of the two original Neural Processes introduced by Garnelo et al. in 2018. Using the architecture framework described above, CNPs can be described as follows.
 
 \begin{align*}
-    \text{Enc}_{\theta_e} = \text{MLP}_{\theta_e} \\
-    \text{Agg} = \text{Sum} \\
-    \text{Dec}_{\theta_d}  = \text{MLP}_{\theta_d} 
+    \text{Enc}_{\theta_e} &= \text{MLP}_{\theta_e} \\
+    \text{Agg} &= \text{Sum} \\
+    \text{Dec}_{\theta_d}  &= \text{MLP}_{\theta_d} 
 \end{align*}
 
 The encoding and summation is an implementation of the `DeepSet' architecture \cite{zaheer2018deep} which is a neural network that is \textbf{Permutation Invariant} (PI) due to the summation operation. This means that the order of the input does not matter. 
@@ -80,9 +80,9 @@ CNPs make the strong assumption that the posterior distribution \emph{factorizes
 The benefit of this factorization assumption (a) is that the model can scale linearly with the number of target points with a tractable likelihood. However, this assumption means
 \textbf{CNPs are unable to generate coherent sample paths, they are only able to produce distributions over the target points.} Furthermore, we need to select a marginal likelihood for the distribution (b) which is usually a Heteroscedastic Gaussian Likelihood (Gaussian with a variance that varies with the input) \cite{garnelo2018conditional}. This also adds a further assumption as we have to select a likelihood for the distribution which may not be appropriate for the data we are modeling.
 
-Since the product of Gaussians is a Gaussian (c) the model learns a mean and variance for each target point (though typically we learn the log variance to ensure it is positive), in this way, the model decoder outputs a function of mean and variance for each target point.
+Since the product of Gaussians is a Gaussian (c) the model learns a mean and variance for each target point (though typically we learn the log variance to ensure it is positive), in this way, the model decoder can be interpreted as outputting a function of mean and variance for each target point.
 
-As the likelihood is a Gaussian, the model can be trained using simple maximum likelihood estimation (MLE) by minimizing the negative log-likelihood (NLL) of the target points $\mathcal{T}$. 
+As the likelihood is a Gaussian, the model can be trained using simple maximum likelihood estimation (MLE) by minimizing the negative log-likelihood (NLL) of the target points.
 
 
 \subsection{Latent Neural Processes}
