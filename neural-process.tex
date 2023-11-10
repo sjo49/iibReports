@@ -35,6 +35,15 @@ Typically the aggregation function is a simple summation of the embeddings. The 
     p(\bm{y}_i\isup{t} | \bm{x}_i\isup{t}, \mathcal{C}) = \text{Dec}_\theta(\bm{x}_i\isup{t}, \bm{R}(\mathcal{C}))
 \end{equation}
 
+The overall architecture is shown in Figure \ref{fig:cnp-architecture}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.3\textwidth]{./figures/np/cnp.png}
+	\caption{CNP Architecture}
+	\label{fig:cnp-architecture}
+\end{figure}
+
 \subsection{Neural Processes vs Gaussian Processes}
 
 From this, it is clear that NPs achieve a \emph{prediction} map, $\pi$ which maps the context set to the target set into a posterior distribution over the outputs. 
@@ -94,6 +103,15 @@ The encoder learns a \emph{distribution} over the latent representation $\mathbf
 \begin{align*}
     p(\mathbf{z} | \mathcal{C}) &= \text{Enc}_\theta(\mathcal{C})\\ p(\bm{y}\isup{t} | \bm{x}\isup{t}, \mathbf{z}) &= \text{Dec}_\theta(\bm{x}\isup{t}, \mathbf{z})
 \end{align*}
+
+The full model is shown in Figure \ref{fig:lnp-architecture}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[height=0.3\textwidth]{./figures/np/lnp.png}
+	\caption{LNP Architecture}
+	\label{fig:lnp-architecture}
+\end{figure}
 
 The likelihood of the target points is then given by the marginal likelihood of the latent representation $\mathbf{z}$.
 
