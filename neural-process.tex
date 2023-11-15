@@ -116,7 +116,7 @@ The full model is shown in Figure \ref{fig:lnp-architecture}.
 The likelihood of the target points is then given by the marginal likelihood of the latent representation $\mathbf{z}$.
 
 \begin{align}
-    p(\bm{y}\isup{t} | \bm{x}\isup{t}, \mathcal{C}) &= \int p(\bm{y}\isup{t} | \bm{x}\isup{t}, \mathbf{z}) p(\mathbf{z} | \mathcal{C}) d\mathbf{z}
+    p(\bm{y}\isup{t} | \bm{x}\isup{t}, \mathcal{C}) &=  \int p(\mathbf{z} | \mathcal{C}) p(\bm{y}\isup{t} | \bm{x}\isup{t}, \mathbf{z})  d\mathbf{z}
     \\ &\stackrel{(a)}{=} \int p(\mathbf{z} | \mathcal{C}) \left(\prod_{i=1}^{N_t} p({y}_i\isup{t} | {x}_i\isup{t}, \mathbf{z})\right)  d\mathbf{z}
     \\ &\stackrel{(b)}{=} \int p(\mathbf{z} | \mathcal{C}) \left(\prod_{i=1}^{N_t} \mathcal{N}({y}_i\isup{t} | \mu_i, \sigma_i^2)\right)  d\mathbf{z}
 \end{align}
