@@ -1,0 +1,29 @@
+\documentclass[main.tex]{subfiles}
+
+
+
+\begin{document}
+
+\section{Device Design}
+
+\subsection{Knee Brace}
+
+\subsection{Sensor}
+
+A sensor comprising of gyroscopes and accelerometers, known as an Inertial Measurement Unit (IMU), is chosen to monitor the knee brace's orientation and motion over optical tracking or electromyography.
+This is because IMUs are small, lightweight and cost-effective, while having been shown to track joint angles and motion
+
+Signal processing for an IMU involves refining data from the accelerometers and gyroscopes to determine orientation and motion.
+Filtering removes noise through algorithms like Kalman filters, calibration corrects sensor biases and alignment errors and sensor fusion integrates data from multiple sensors to smooth errors.
+This sort of signal processing optimizes IMU data for more precise orientation and motion tracking.
+
+\subsection{}
+
+
+
+
+
+
+\ifSubfilesClassLoaded{%
+	\printbibliography{}
+}{}
